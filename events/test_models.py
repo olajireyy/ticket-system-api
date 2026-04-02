@@ -9,7 +9,7 @@ def test_create_event_initializes_correctly():
         name = "Tech Conference 2026",
         total_capacity=500,
         available_tickets=500,              
-        proce=150.00
+        price=150.00
     )
     # Now we check if the event was created with the correct values with assert
     assert event.name == "Tech Conference 2026"
