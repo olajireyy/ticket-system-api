@@ -1,0 +1,28 @@
+name: Django Backend Pipeline
+
+# Run very time pushed to the 'main' branch.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Checkout Code
+      uses: actions/checkout@v4
+
+    - name: 2. Build and Start Micro-Architecture   
+      run: docker-compose up -d --build
+
+    - name: 3. Wait for PostgreSQL & Redis to boot
+      run: sleep 10
+
+    - name: 4. Run Django Migrations
+      run: docker-compose exec -T web python manage.py migrate
+
+    - name: 5. Run Automated Tests
+      run: docker-compose exec -T web python manage.py test
