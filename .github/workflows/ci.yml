@@ -25,4 +25,4 @@ jobs:
       run: docker compose exec -T web python manage.py migrate
 
     - name: 5. Run Automated Tests
-      run: docker compose exec -T web python manage.py test
+      run: docker compose exec -T web pytest
