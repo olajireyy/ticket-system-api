@@ -1,0 +1,45 @@
+
+services:
+  # 1. The Database Container
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ticket_api
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Jibril120207 # Use a simple password here
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # This saves your data so it isn't lost on restart
+
+  # 2. The Redis Container
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # 3. The Django API Container
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app # Syncs your local code to the container so you don't have to rebuild on every save
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  # 4. The Celery Worker Container
+  celery:
+    build: .
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+# Declare the persistent volume for the database
+volumes:
+  postgres_data:
