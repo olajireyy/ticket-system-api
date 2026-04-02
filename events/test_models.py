@@ -15,4 +15,4 @@ def test_create_event_initializes_correctly():
     assert event.name == "Tech Conference 2026"
     assert event.total_capacity == 500
     assert event.available_tickets == 500
-    assert event.is_sold_out is False
+    assert event.is_sold_out() is False
