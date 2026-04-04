@@ -11,4 +11,3 @@ postgres_data/
 .env
 
 xNotes/
-*.md
